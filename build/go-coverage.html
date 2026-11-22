@@ -1,0 +1,857 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>semester2_lab3: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">semester2_lab3/array.go (100.0%)</option>
+				
+				<option value="file1">semester2_lab3/double_list.go (100.0%)</option>
+				
+				<option value="file2">semester2_lab3/hash_table.go (94.4%)</option>
+				
+				<option value="file3">semester2_lab3/persistence.go (96.6%)</option>
+				
+				<option value="file4">semester2_lab3/queue.go (100.0%)</option>
+				
+				<option value="file5">semester2_lab3/single_list.go (100.0%)</option>
+				
+				<option value="file6">semester2_lab3/stack.go (100.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package structures
+
+// Array хранит элементы, их количество и размер выделенной памяти.
+type Array struct {
+        data     []string
+        size     int
+        capacity int
+}
+
+func (array *Array) Size() int <span class="cov8" title="1">{
+        return array.size
+}</span>
+
+func (array *Array) Push(value string) <span class="cov8" title="1">{
+        array.Insert(array.size, value)
+}</span>
+
+// При нехватке места увеличивает массив и вставляет значение по индексу.
+func (array *Array) Insert(index int, value string) <span class="cov8" title="1">{
+        if index &lt; 0 || index &gt; array.size </span><span class="cov8" title="1">{
+                panic("index out of range")</span>
+        }
+        <span class="cov8" title="1">if array.size == array.capacity </span><span class="cov8" title="1">{
+                newCapacity := 4
+                if array.capacity &gt; 0 </span><span class="cov8" title="1">{
+                        newCapacity = array.capacity * 2
+                }</span>
+                <span class="cov8" title="1">newData := make([]string, newCapacity)
+                copy(newData, array.data)
+                array.data = newData
+                array.capacity = newCapacity</span>
+        }
+        <span class="cov8" title="1">for i := array.size; i &gt; index; i-- </span><span class="cov8" title="1">{
+                array.data[i] = array.data[i-1]
+        }</span>
+        <span class="cov8" title="1">array.data[index] = value
+        array.size++</span>
+}
+
+func (array *Array) Get(index int) string <span class="cov8" title="1">{
+        if index &lt; 0 || index &gt;= array.size </span><span class="cov8" title="1">{
+                panic("index out of range")</span>
+        }
+        <span class="cov8" title="1">return array.data[index]</span>
+}
+
+func (array *Array) Set(index int, value string) <span class="cov8" title="1">{
+        if index &lt; 0 || index &gt;= array.size </span><span class="cov8" title="1">{
+                panic("index out of range")</span>
+        }
+        <span class="cov8" title="1">array.data[index] = value</span>
+}
+
+// Удаляет элемент и сдвигает оставшиеся значения влево.
+func (array *Array) Delete(index int) string <span class="cov8" title="1">{
+        value := array.Get(index)
+        for i := index; i+1 &lt; array.size; i++ </span><span class="cov8" title="1">{
+                array.data[i] = array.data[i+1]
+        }</span>
+        <span class="cov8" title="1">array.size--
+        array.data[array.size] = ""
+        return value</span>
+}
+
+func (array *Array) Values() []string <span class="cov8" title="1">{
+        result := make([]string, array.size)
+        copy(result, array.data[:array.size])
+        return result
+}</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package structures
+
+// doubleNode хранит ссылки на предыдущий и следующий узлы.
+type doubleNode struct {
+        value string
+        prev  *doubleNode
+        next  *doubleNode
+}
+
+type DoubleList struct {
+        head *doubleNode
+        tail *doubleNode
+        size int
+}
+
+func (list *DoubleList) Size() int <span class="cov8" title="1">{
+        return list.size
+}</span>
+
+func (list *DoubleList) at(index int) *doubleNode <span class="cov8" title="1">{
+        if index &lt; 0 || index &gt;= list.size </span><span class="cov8" title="1">{
+                panic("index out of range")</span>
+        }
+        <span class="cov8" title="1">node := list.head
+        for i := 0; i &lt; index; i++ </span><span class="cov8" title="1">{
+                node = node.next
+        }</span>
+        <span class="cov8" title="1">return node</span>
+}
+
+// Вставляет узел и обновляет связи с соседними узлами.
+func (list *DoubleList) Insert(index int, value string) <span class="cov8" title="1">{
+        if index &lt; 0 || index &gt; list.size </span><span class="cov8" title="1">{
+                panic("index out of range")</span>
+        }
+        <span class="cov8" title="1">node := &amp;doubleNode{value: value}
+        if index == list.size </span><span class="cov8" title="1">{
+                node.prev = list.tail
+                if list.tail == nil </span><span class="cov8" title="1">{
+                        list.head = node
+                }</span> else<span class="cov8" title="1"> {
+                        list.tail.next = node
+                }</span>
+                <span class="cov8" title="1">list.tail = node</span>
+        } else<span class="cov8" title="1"> {
+                after := list.at(index)
+                node.next = after
+                node.prev = after.prev
+                if after.prev == nil </span><span class="cov8" title="1">{
+                        list.head = node
+                }</span> else<span class="cov8" title="1"> {
+                        after.prev.next = node
+                }</span>
+                <span class="cov8" title="1">after.prev = node</span>
+        }
+        <span class="cov8" title="1">list.size++</span>
+}
+
+func (list *DoubleList) Get(index int) string <span class="cov8" title="1">{
+        return list.at(index).value
+}</span>
+
+// Удаляет узел, сохраняя прямые и обратные связи списка.
+func (list *DoubleList) Delete(index int) string <span class="cov8" title="1">{
+        node := list.at(index)
+        if node.prev == nil </span><span class="cov8" title="1">{
+                list.head = node.next
+        }</span> else<span class="cov8" title="1"> {
+                node.prev.next = node.next
+        }</span>
+        <span class="cov8" title="1">if node.next == nil </span><span class="cov8" title="1">{
+                list.tail = node.prev
+        }</span> else<span class="cov8" title="1"> {
+                node.next.prev = node.prev
+        }</span>
+        <span class="cov8" title="1">list.size--
+        return node.value</span>
+}
+
+func (list *DoubleList) Find(value string) int <span class="cov8" title="1">{
+        index := 0
+        for node := list.head; node != nil; node = node.next </span><span class="cov8" title="1">{
+                if node.value == value </span><span class="cov8" title="1">{
+                        return index
+                }</span>
+                <span class="cov8" title="1">index++</span>
+        }
+        <span class="cov8" title="1">return -1</span>
+}
+
+// Читает список от начала или от конца.
+func (list *DoubleList) Values(reverse bool) []string <span class="cov8" title="1">{
+        result := []string{}
+        if reverse </span><span class="cov8" title="1">{
+                for node := list.tail; node != nil; node = node.prev </span><span class="cov8" title="1">{
+                        result = append(result, node.value)
+                }</span>
+        } else<span class="cov8" title="1"> {
+                for node := list.head; node != nil; node = node.next </span><span class="cov8" title="1">{
+                        result = append(result, node.value)
+                }</span>
+        }
+        <span class="cov8" title="1">return result</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package structures
+
+import "sort"
+
+type hashEntry struct {
+        key, value string
+        used       bool
+}
+type HashTable struct {
+        cuckoo        bool
+        chains        [][]hashEntry
+        first, second []hashEntry
+        count         int
+        seed          uint64
+}
+
+func NewHashTable(cuckoo bool) *HashTable <span class="cov8" title="1">{
+        h := &amp;HashTable{cuckoo: cuckoo}
+        if cuckoo </span><span class="cov8" title="1">{
+                h.first = make([]hashEntry, 11)
+                h.second = make([]hashEntry, 11)
+        }</span> else<span class="cov8" title="1"> {
+                h.chains = make([][]hashEntry, 11)
+        }</span>
+        <span class="cov8" title="1">return h</span>
+}
+func (h *HashTable) Size() int <span class="cov8" title="1">{ return h.count }</span>
+
+func hashCode(s string, salt uint64) uint64 <span class="cov8" title="1">{
+        h := uint64(1469598103934665603) ^ salt
+        for i := 0; i &lt; len(s); i++ </span><span class="cov8" title="1">{
+                h ^= uint64(s[i])
+                h *= 1099511628211
+        }</span>
+        <span class="cov8" title="1">h ^= h &gt;&gt; 33
+        h *= 0xff51afd7ed558ccd
+        h ^= h &gt;&gt; 33
+        return h</span>
+}
+func (h *HashTable) bucket(key string, table int) int <span class="cov8" title="1">{
+        capacity := len(h.chains)
+        if h.cuckoo </span><span class="cov8" title="1">{
+                capacity = len(h.first)
+        }</span>
+        <span class="cov8" title="1">salt := h.seed
+        if table == 1 </span><span class="cov8" title="1">{
+                salt += 0x9e3779b97f4a7c15
+        }</span>
+        <span class="cov8" title="1">return int(hashCode(key, salt) % uint64(capacity))</span>
+}
+func (h *HashTable) slot(key string, table int) *hashEntry <span class="cov8" title="1">{
+        if table == 0 </span><span class="cov8" title="1">{
+                return &amp;h.first[h.bucket(key, 0)]
+        }</span>
+        <span class="cov8" title="1">return &amp;h.second[h.bucket(key, 1)]</span>
+}
+func (h *HashTable) Capacity() int <span class="cov8" title="1">{
+        if h.cuckoo </span><span class="cov8" title="1">{
+                return len(h.first) * 2
+        }</span>
+        <span class="cov8" title="1">return len(h.chains)</span>
+}
+func (h *HashTable) Get(key string) (string, bool) <span class="cov8" title="1">{
+        if h.cuckoo </span><span class="cov8" title="1">{
+                for i := 0; i &lt; 2; i++ </span><span class="cov8" title="1">{
+                        p := h.slot(key, i)
+                        if p.used &amp;&amp; p.key == key </span><span class="cov8" title="1">{
+                                return p.value, true
+                        }</span>
+                }
+        } else<span class="cov8" title="1"> {
+                for _, e := range h.chains[h.bucket(key, 0)] </span><span class="cov8" title="1">{
+                        if e.key == key </span><span class="cov8" title="1">{
+                                return e.value, true
+                        }</span>
+                }
+        }
+        <span class="cov8" title="1">return "", false</span>
+}
+func (h *HashTable) entries() []hashEntry <span class="cov8" title="1">{
+        out := make([]hashEntry, 0, h.count)
+        if h.cuckoo </span><span class="cov8" title="1">{
+                for _, p := range h.first </span><span class="cov8" title="1">{
+                        if p.used </span><span class="cov8" title="1">{
+                                out = append(out, p)
+                        }</span>
+                }
+                <span class="cov8" title="1">for _, p := range h.second </span><span class="cov8" title="1">{
+                        if p.used </span><span class="cov8" title="1">{
+                                out = append(out, p)
+                        }</span>
+                }
+        } else<span class="cov8" title="1"> {
+                for _, b := range h.chains </span><span class="cov8" title="1">{
+                        out = append(out, b...)
+                }</span>
+        }
+        <span class="cov8" title="1">return out</span>
+}
+func (h *HashTable) insertRaw(e hashEntry) *hashEntry <span class="cov8" title="1">{
+        table := 0
+        for i := 0; i &lt; 4*len(h.first); i++ </span><span class="cov8" title="1">{
+                p := h.slot(e.key, table)
+                if !p.used </span><span class="cov8" title="1">{
+                        *p = e
+                        h.count++
+                        return nil
+                }</span>
+                <span class="cov8" title="1">e, *p = *p, e
+                table ^= 1</span>
+        }
+        <span class="cov8" title="1">return &amp;e</span>
+}
+func (h *HashTable) rebuild(entries []hashEntry, capacity int) <span class="cov8" title="1">{
+        for </span><span class="cov8" title="1">{
+                h.first = make([]hashEntry, capacity)
+                h.second = make([]hashEntry, capacity)
+                h.count = 0
+                h.seed++
+                failed := false
+                for i, e := range entries </span><span class="cov8" title="1">{
+                        if displaced := h.insertRaw(e); displaced != nil </span><span class="cov0" title="0">{
+                                retry := append([]hashEntry{}, entries[i+1:]...)
+                                retry = append(retry, *displaced)
+                                retry = append(retry, h.entries()...)
+                                entries = retry
+                                failed = true
+                                break</span>
+                        }
+                }
+                <span class="cov8" title="1">if !failed </span><span class="cov8" title="1">{
+                        return
+                }</span>
+                <span class="cov0" title="0">capacity = capacity*2 + 1</span>
+        }
+}
+func (h *HashTable) Put(key, value string) bool <span class="cov8" title="1">{
+        if h.cuckoo </span><span class="cov8" title="1">{
+                for i := 0; i &lt; 2; i++ </span><span class="cov8" title="1">{
+                        p := h.slot(key, i)
+                        if p.used &amp;&amp; p.key == key </span><span class="cov8" title="1">{
+                                p.value = value
+                                return false
+                        }</span>
+                }
+                <span class="cov8" title="1">if (h.count+1)*2 &gt; h.Capacity() </span><span class="cov8" title="1">{
+                        all := append(h.entries(), hashEntry{key, value, true})
+                        h.rebuild(all, len(h.first)*2+1)
+                        return true
+                }</span>
+                <span class="cov8" title="1">if displaced := h.insertRaw(hashEntry{key, value, true}); displaced != nil </span><span class="cov8" title="1">{
+                        all := append(h.entries(), *displaced)
+                        h.rebuild(all, len(h.first)*2+1)
+                }</span>
+                <span class="cov8" title="1">return true</span>
+        }
+        <span class="cov8" title="1">index := h.bucket(key, 0)
+        for i := range h.chains[index] </span><span class="cov8" title="1">{
+                if h.chains[index][i].key == key </span><span class="cov8" title="1">{
+                        h.chains[index][i].value = value
+                        return false
+                }</span>
+        }
+        <span class="cov8" title="1">if (h.count+1)*10 &gt; len(h.chains)*9 </span><span class="cov8" title="1">{
+                old := h.entries()
+                h.chains = make([][]hashEntry, len(h.chains)*2+1)
+                h.count = 0
+                for _, e := range old </span><span class="cov8" title="1">{
+                        h.Put(e.key, e.value)
+                }</span>
+        }
+        <span class="cov8" title="1">index = h.bucket(key, 0)
+        h.chains[index] = append(h.chains[index], hashEntry{key, value, true})
+        h.count++
+        return true</span>
+}
+func (h *HashTable) Delete(key string) bool <span class="cov8" title="1">{
+        if h.cuckoo </span><span class="cov8" title="1">{
+                for i := 0; i &lt; 2; i++ </span><span class="cov8" title="1">{
+                        p := h.slot(key, i)
+                        if p.used &amp;&amp; p.key == key </span><span class="cov8" title="1">{
+                                *p = hashEntry{}
+                                h.count--
+                                return true
+                        }</span>
+                }
+        } else<span class="cov8" title="1"> {
+                index := h.bucket(key, 0)
+                b := h.chains[index]
+                for i, e := range b </span><span class="cov8" title="1">{
+                        if e.key == key </span><span class="cov8" title="1">{
+                                copy(b[i:], b[i+1:])
+                                b[len(b)-1] = hashEntry{}
+                                h.chains[index] = b[:len(b)-1]
+                                h.count--
+                                return true
+                        }</span>
+                }
+        }
+        <span class="cov8" title="1">return false</span>
+}
+func (h *HashTable) Keys() []string <span class="cov8" title="1">{
+        keys := make([]string, 0, h.count)
+        for _, e := range h.entries() </span><span class="cov8" title="1">{
+                keys = append(keys, e.key)
+        }</span>
+        <span class="cov8" title="1">sort.Strings(keys)
+        return keys</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package structures
+
+import (
+        "bytes"
+        "encoding/binary"
+        "encoding/hex"
+        "errors"
+        "fmt"
+        "io"
+        "strings"
+)
+
+const (
+        binaryHeader   = "LR3G"
+        maxItems       = 1_000_000
+        maxStringBytes = 16 * 1024 * 1024
+)
+
+// Lab1Data groups the structures from Lab 1 into one binary snapshot.
+type Lab1Data struct {
+        Array  Array
+        Single SingleList
+        Double DoubleList
+        Queue  Queue
+        Stack  Stack
+}
+
+func (data *Lab1Data) MarshalBinary() ([]byte, error) <span class="cov8" title="1">{
+        out := []byte(binaryHeader)
+        groups := [][]string{
+                data.Array.Values(), data.Single.Values(), data.Double.Values(false),
+                data.Queue.Values(), data.Stack.Values(),
+        }
+        for _, group := range groups </span><span class="cov8" title="1">{
+                if len(group) &gt; maxItems </span><span class="cov0" title="0">{
+                        return nil, errors.New("too many items")
+                }</span>
+                <span class="cov8" title="1">out = binary.LittleEndian.AppendUint32(out, uint32(len(group)))
+                for _, value := range group </span><span class="cov8" title="1">{
+                        if len(value) &gt; maxStringBytes </span><span class="cov0" title="0">{
+                                return nil, errors.New("string too large")
+                        }</span>
+                        <span class="cov8" title="1">out = binary.LittleEndian.AppendUint32(out, uint32(len(value)))
+                        out = append(out, value...)</span>
+                }
+        }
+        <span class="cov8" title="1">return out, nil</span>
+}
+
+func readCount(in *bytes.Reader, limit uint32) (uint32, error) <span class="cov8" title="1">{
+        var value uint32
+        if err := binary.Read(in, binary.LittleEndian, &amp;value); err != nil </span><span class="cov8" title="1">{
+                return 0, err
+        }</span>
+        <span class="cov8" title="1">if value &gt; limit </span><span class="cov8" title="1">{
+                return 0, errors.New("invalid length")
+        }</span>
+        <span class="cov8" title="1">return value, nil</span>
+}
+
+func readStrings(in *bytes.Reader) ([]string, error) <span class="cov8" title="1">{
+        count, err := readCount(in, maxItems)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">values := []string{}
+        for i := uint32(0); i &lt; count; i++ </span><span class="cov8" title="1">{
+                size, err := readCount(in, maxStringBytes)
+                if err != nil </span><span class="cov8" title="1">{
+                        return nil, err
+                }</span>
+                <span class="cov8" title="1">if uint64(size) &gt; uint64(in.Len()) </span><span class="cov8" title="1">{
+                        return nil, io.ErrUnexpectedEOF
+                }</span>
+                <span class="cov8" title="1">value := make([]byte, size)
+                if _, err := io.ReadFull(in, value); err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+                <span class="cov8" title="1">values = append(values, string(value))</span>
+        }
+        <span class="cov8" title="1">return values, nil</span>
+}
+
+func (data *Lab1Data) UnmarshalBinary(raw []byte) error <span class="cov8" title="1">{
+        if !bytes.HasPrefix(raw, []byte(binaryHeader)) </span><span class="cov8" title="1">{
+                return errors.New("invalid binary header")
+        }</span>
+        <span class="cov8" title="1">in := bytes.NewReader(raw[len(binaryHeader):])
+        var groups [5][]string
+        for i := range groups </span><span class="cov8" title="1">{
+                values, err := readStrings(in)
+                if err != nil </span><span class="cov8" title="1">{
+                        return fmt.Errorf("group %d: %w", i, err)
+                }</span>
+                <span class="cov8" title="1">groups[i] = values</span>
+        }
+        <span class="cov8" title="1">if in.Len() != 0 </span><span class="cov8" title="1">{
+                return errors.New("unexpected data after stack")
+        }</span>
+
+        <span class="cov8" title="1">var next Lab1Data
+        for _, value := range groups[0] </span><span class="cov8" title="1">{
+                next.Array.Push(value)
+        }</span>
+        <span class="cov8" title="1">for _, value := range groups[1] </span><span class="cov8" title="1">{
+                next.Single.Insert(next.Single.Size(), value)
+        }</span>
+        <span class="cov8" title="1">for _, value := range groups[2] </span><span class="cov8" title="1">{
+                next.Double.Insert(next.Double.Size(), value)
+        }</span>
+        <span class="cov8" title="1">for _, value := range groups[3] </span><span class="cov8" title="1">{
+                next.Queue.Push(value)
+        }</span>
+        <span class="cov8" title="1">for i := len(groups[4]) - 1; i &gt;= 0; i-- </span><span class="cov8" title="1">{
+                next.Stack.Push(groups[4][i])
+        }</span>
+        <span class="cov8" title="1">*data = next
+        return nil</span>
+}
+
+func (h *HashTable) MarshalText() ([]byte, error) <span class="cov8" title="1">{
+        var out strings.Builder
+        method := "chain"
+        if h.cuckoo </span><span class="cov8" title="1">{
+                method = "cuckoo"
+        }</span>
+        <span class="cov8" title="1">out.WriteString("LR3T " + method + "\n")
+        for _, key := range h.Keys() </span><span class="cov8" title="1">{
+                value, _ := h.Get(key)
+                out.WriteString(hex.EncodeToString([]byte(key)))
+                out.WriteByte('\t')
+                out.WriteString(hex.EncodeToString([]byte(value)))
+                out.WriteByte('\n')
+        }</span>
+        <span class="cov8" title="1">return []byte(out.String()), nil</span>
+}
+
+func (h *HashTable) UnmarshalText(raw []byte) error <span class="cov8" title="1">{
+        lines := strings.Split(strings.TrimSuffix(string(raw), "\n"), "\n")
+        header := strings.TrimSuffix(lines[0], "\r")
+        if header != "LR3T chain" &amp;&amp; header != "LR3T cuckoo" </span><span class="cov8" title="1">{
+                return errors.New("invalid text header")
+        }</span>
+        <span class="cov8" title="1">next := NewHashTable(header == "LR3T cuckoo")
+        for _, line := range lines[1:] </span><span class="cov8" title="1">{
+                keyHex, valueHex, found := strings.Cut(strings.TrimSuffix(line, "\r"), "\t")
+                if !found </span><span class="cov8" title="1">{
+                        return errors.New("missing key/value separator")
+                }</span>
+                <span class="cov8" title="1">key, err := hex.DecodeString(keyHex)
+                if err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">value, err := hex.DecodeString(valueHex)
+                if err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">if !next.Put(string(key), string(value)) </span><span class="cov8" title="1">{
+                        return errors.New("duplicate hash key")
+                }</span>
+        }
+        <span class="cov8" title="1">*h = *next
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package structures
+
+// Очередь хранит начало и конец; первым удаляется первый добавленный элемент.
+type queueNode struct {
+        value string
+        next  *queueNode
+}
+
+type Queue struct {
+        head *queueNode
+        tail *queueNode
+}
+
+func (queue *Queue) Push(value string) <span class="cov8" title="1">{
+        node := &amp;queueNode{value: value}
+        if queue.tail == nil </span><span class="cov8" title="1">{
+                queue.head = node
+        }</span> else<span class="cov8" title="1"> {
+                queue.tail.next = node
+        }</span>
+        <span class="cov8" title="1">queue.tail = node</span>
+}
+
+func (queue *Queue) Get() string <span class="cov8" title="1">{
+        if queue.head == nil </span><span class="cov8" title="1">{
+                panic("queue is empty")</span>
+        }
+        <span class="cov8" title="1">return queue.head.value</span>
+}
+
+func (queue *Queue) Pop() string <span class="cov8" title="1">{
+        value := queue.Get()
+        queue.head = queue.head.next
+        if queue.head == nil </span><span class="cov8" title="1">{
+                queue.tail = nil
+        }</span>
+        <span class="cov8" title="1">return value</span>
+}
+
+func (queue *Queue) Values() []string <span class="cov8" title="1">{
+        result := []string{}
+        for node := queue.head; node != nil; node = node.next </span><span class="cov8" title="1">{
+                result = append(result, node.value)
+        }</span>
+        <span class="cov8" title="1">return result</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package structures
+
+// singleNode хранит значение и ссылку на следующий узел.
+type singleNode struct {
+        value string
+        next  *singleNode
+}
+
+type SingleList struct {
+        head *singleNode
+        tail *singleNode
+        size int
+}
+
+func (list *SingleList) Size() int <span class="cov8" title="1">{
+        return list.size
+}</span>
+
+// Находит узел по индексу, последовательно проходя список.
+func (list *SingleList) at(index int) *singleNode <span class="cov8" title="1">{
+        if index &lt; 0 || index &gt;= list.size </span><span class="cov8" title="1">{
+                panic("index out of range")</span>
+        }
+        <span class="cov8" title="1">node := list.head
+        for i := 0; i &lt; index; i++ </span><span class="cov8" title="1">{
+                node = node.next
+        }</span>
+        <span class="cov8" title="1">return node</span>
+}
+
+// Вставляет новый узел в начало или после предыдущего узла.
+func (list *SingleList) Insert(index int, value string) <span class="cov8" title="1">{
+        if index &lt; 0 || index &gt; list.size </span><span class="cov8" title="1">{
+                panic("index out of range")</span>
+        }
+        <span class="cov8" title="1">node := &amp;singleNode{value: value}
+        if index == 0 </span><span class="cov8" title="1">{
+                node.next = list.head
+                list.head = node
+                if list.tail == nil </span><span class="cov8" title="1">{
+                        list.tail = node
+                }</span>
+        } else<span class="cov8" title="1"> {
+                before := list.tail
+                if index &lt; list.size </span><span class="cov8" title="1">{
+                        before = list.at(index - 1)
+                }</span>
+                <span class="cov8" title="1">node.next = before.next
+                before.next = node
+                if node.next == nil </span><span class="cov8" title="1">{
+                        list.tail = node
+                }</span>
+        }
+        <span class="cov8" title="1">list.size++</span>
+}
+
+func (list *SingleList) Get(index int) string <span class="cov8" title="1">{
+        return list.at(index).value
+}</span>
+
+// Удаляет узел и соединяет соседние элементы списка.
+func (list *SingleList) Delete(index int) string <span class="cov8" title="1">{
+        if index &lt; 0 || index &gt;= list.size </span><span class="cov8" title="1">{
+                panic("index out of range")</span>
+        }
+        <span class="cov8" title="1">var node *singleNode
+        if index == 0 </span><span class="cov8" title="1">{
+                node = list.head
+                list.head = node.next
+                if list.head == nil </span><span class="cov8" title="1">{
+                        list.tail = nil
+                }</span>
+        } else<span class="cov8" title="1"> {
+                before := list.at(index - 1)
+                node = before.next
+                before.next = node.next
+                if before.next == nil </span><span class="cov8" title="1">{
+                        list.tail = before
+                }</span>
+        }
+        <span class="cov8" title="1">list.size--
+        return node.value</span>
+}
+
+func (list *SingleList) Find(value string) int <span class="cov8" title="1">{
+        index := 0
+        for node := list.head; node != nil; node = node.next </span><span class="cov8" title="1">{
+                if node.value == value </span><span class="cov8" title="1">{
+                        return index
+                }</span>
+                <span class="cov8" title="1">index++</span>
+        }
+        <span class="cov8" title="1">return -1</span>
+}
+
+func (list *SingleList) Values() []string <span class="cov8" title="1">{
+        result := []string{}
+        for node := list.head; node != nil; node = node.next </span><span class="cov8" title="1">{
+                result = append(result, node.value)
+        }</span>
+        <span class="cov8" title="1">return result</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package structures
+
+// Стек хранит вершину; первым удаляется последний добавленный элемент.
+type stackNode struct {
+        value string
+        next  *stackNode
+}
+
+type Stack struct {
+        top *stackNode
+}
+
+func (stack *Stack) Push(value string) <span class="cov8" title="1">{
+        stack.top = &amp;stackNode{value: value, next: stack.top}
+}</span>
+
+func (stack *Stack) Get() string <span class="cov8" title="1">{
+        if stack.top == nil </span><span class="cov8" title="1">{
+                panic("stack is empty")</span>
+        }
+        <span class="cov8" title="1">return stack.top.value</span>
+}
+
+func (stack *Stack) Pop() string <span class="cov8" title="1">{
+        value := stack.Get()
+        stack.top = stack.top.next
+        return value
+}</span>
+
+func (stack *Stack) Values() []string <span class="cov8" title="1">{
+        result := []string{}
+        for node := stack.top; node != nil; node = node.next </span><span class="cov8" title="1">{
+                result = append(result, node.value)
+        }</span>
+        <span class="cov8" title="1">return result</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
