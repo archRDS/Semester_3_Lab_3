@@ -1,13 +1,20 @@
 
 /* Executed and missed source lines in LCOV 1.x and 2.x. */
-.lineCov,
-.tlaGBC {
+span.lineCov,
+span.tlaGBC,
+span.tlaGNC,
+span.tlaBgGBC,
+span.tlaBgGNC,
+a.tlaBgGBC,
+a.tlaBgGNC {
     background-color: #dcfce7;
     color: #14532d;
 }
 
-.lineNoCov,
-.tlaUNC {
+span.lineNoCov,
+span.tlaUNC,
+span.tlaBgUNC,
+a.tlaBgUNC {
     background-color: #fee2e2;
     color: #991b1b;
 }
