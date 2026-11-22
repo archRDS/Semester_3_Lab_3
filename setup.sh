@@ -5,14 +5,11 @@ project_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 tools_dir="$project_dir/.tools/linux"
 
 missing=()
-for tool in curl cmake gcc g++ gcov ninja cppcheck python3; do
+for tool in curl cmake gcc g++ gcov ninja cppcheck lcov genhtml; do
     if ! command -v "$tool" >/dev/null; then
         missing+=("$tool")
     fi
 done
-if command -v python3 >/dev/null && ! python3 -c 'import venv, ensurepip' 2>/dev/null; then
-    missing+=(python3-venv)
-fi
 if ((${#missing[@]})); then
     printf 'Required system tools: %s\n' "${missing[*]}"
     if command -v apt-get >/dev/null; then
@@ -22,9 +19,9 @@ if ((${#missing[@]})); then
         fi
         "${install_prefix[@]}" apt-get update
         "${install_prefix[@]}" apt-get install -y \
-            ca-certificates curl build-essential cmake ninja-build cppcheck python3-venv
+            ca-certificates curl build-essential cmake ninja-build cppcheck lcov
     else
-        printf 'Install the listed tools and Python venv with your package manager, then rerun setup.sh.\n' >&2
+        printf 'Install the listed tools with your package manager, then rerun setup.sh.\n' >&2
         exit 1
     fi
 fi
@@ -62,10 +59,5 @@ export PATH="$tools_dir/go/bin:$PATH"
 export GOMODCACHE="$tools_dir/go-mod" GOCACHE="$tools_dir/go-cache" GOTELEMETRY=off
 GOBIN="$tools_dir/bin" go install honnef.co/go/tools/cmd/staticcheck@v0.7.0
 (cd -- "$project_dir/go" && go mod download)
-
-if [[ ! -x "$tools_dir/venv/bin/python" ]]; then
-    python3 -m venv "$tools_dir/venv"
-fi
-"$tools_dir/venv/bin/python" -m pip install --disable-pip-version-check 'gcovr==8.6'
 
 printf 'Setup complete. Run bash check.sh from the project directory.\n'

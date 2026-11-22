@@ -31,9 +31,9 @@ jobs:
         with:
           name: linux-results
           path: |
-            build/linux/reports/*.html
-            build/linux/reports/*.css
-            build/linux/reports/*.js
+            build/linux/reports/cpp-coverage/
+            build/linux/reports/cpp-coverage.info
+            build/linux/reports/go-coverage.html
             build-linux.log
           if-no-files-found: error
           retention-days: 7

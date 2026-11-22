@@ -9,8 +9,8 @@ coverage_build="$build_dir/cpp-coverage"
 release_build="$build_dir/cpp-release"
 jobs=${CMAKE_BUILD_PARALLEL_LEVEL:-4}
 
-for tool in "$tools_dir/go/bin/go" "$tools_dir/bin/staticcheck" "$tools_dir/venv/bin/gcovr"; do
-    if [[ ! -x "$tool" ]]; then
+for tool in "$tools_dir/go/bin/go" "$tools_dir/bin/staticcheck" lcov genhtml; do
+    if ! command -v "$tool" >/dev/null; then
         printf 'Run bash setup.sh before check.sh. Missing tool: %s\n' "$tool" >&2
         exit 1
     fi
@@ -30,12 +30,22 @@ cmake -S "$project_dir/cpp" -B "$coverage_build" -G Ninja \
 cmake --build "$coverage_build" --parallel "$jobs"
 find "$coverage_build" -type f -name '*.gcda' -delete
 ctest --test-dir "$coverage_build" --output-on-failure
-(
-    cd -- "$project_dir/cpp"
-    "$tools_dir/venv/bin/gcovr" --root . --filter 'src/' \
-        --html-details "$reports_dir/cpp-coverage.html" \
-        --print-summary --fail-under-line 85 "$coverage_build"
-)
+cpp_trace="$reports_dir/cpp-coverage.info"
+cpp_html="$reports_dir/cpp-coverage"
+branch_config=(--rc lcov_branch_coverage=1)
+lcov --capture --directory "$coverage_build/CMakeFiles/structures.dir" \
+    --base-directory "$project_dir/cpp" --no-external "${branch_config[@]}" \
+    --output-file "$coverage_build/raw.info"
+lcov --extract "$coverage_build/raw.info" "$project_dir/cpp/src/*" \
+    "${branch_config[@]}" --output-file "$cpp_trace"
+genhtml "$cpp_trace" --branch-coverage --legend --prefix "$project_dir/cpp" \
+    --title 'Lab 3 C++' --output-directory "$cpp_html"
+cat "$project_dir/cpp/coverage-colors.css" >> "$cpp_html/gcov.css"
+
+if ! awk -F: '/^LF:/{total += $2} /^LH:/{hit += $2} END {exit !(total && hit * 100 >= 85 * total)}' "$cpp_trace"; then
+    printf 'C++ line coverage did not reach 85%%.\n' >&2
+    exit 1
+fi
 
 printf '\nC++ benchmarks\n'
 cmake -S "$project_dir/cpp" -B "$release_build" -G Ninja \
