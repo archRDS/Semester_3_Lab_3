@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - Lab 3 C++ - src/persistence.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - persistence.cpp<span style="font-size: 80%;"> (source / <a href="persistence.cpp.func-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">Lab 3 C++</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">70</td>
+            <td class="headerCovTableEntry">70</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-11-23 05:27:54</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntry">8</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Legend:</td>
+            <td class="headerValueLeg">            Lines:
+            <span class="coverLegendCov">hit</span>
+            <span class="coverLegendNoCov">not hit</span>
+            | Branches:
+            <span class="coverLegendCov">+</span> taken
+            <span class="coverLegendNoCov">-</span> not taken
+            <span class="coverLegendNoCov">#</span> not executed
+</td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntryLo">69.1&nbsp;%</td>
+            <td class="headerCovTableEntry">152</td>
+            <td class="headerCovTableEntry">105</td>
+          </tr>
+                  <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">             Branch data     Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>                 :             : #include &quot;persistence.h&quot;</span>
+<span id="L2"><span class="lineNum">       2</span>                 :             : </span>
+<span id="L3"><span class="lineNum">       3</span>                 :             : #include &lt;cstdint&gt;</span>
+<span id="L4"><span class="lineNum">       4</span>                 :             : #include &lt;istream&gt;</span>
+<span id="L5"><span class="lineNum">       5</span>                 :             : #include &lt;ostream&gt;</span>
+<span id="L6"><span class="lineNum">       6</span>                 :             : #include &lt;stdexcept&gt;</span>
+<span id="L7"><span class="lineNum">       7</span>                 :             : </span>
+<span id="L8"><span class="lineNum">       8</span>                 :             : namespace {</span>
+<span id="L9"><span class="lineNum">       9</span>                 :             : </span>
+<span id="L10"><span class="lineNum">      10</span>                 :             : constexpr std::uint32_t maxItems = 1000000U;</span>
+<span id="L11"><span class="lineNum">      11</span>                 :             : constexpr std::uint32_t maxStringBytes = 16U * 1024 * 1024;</span>
+<span id="L12"><span class="lineNum">      12</span>                 :             : </span>
+<span id="L13"><span class="lineNum">      13</span>                 :<span class="tlaGNC tlaBgGNC">          41 : void write32(std::ostream&amp; output, std::uint32_t value) {</span></span>
+<span id="L14"><span class="lineNum">      14</span>         [<span class="tlaGBC" title="Branch 0 was taken 164 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 41 times"> + </span>]:<span class="tlaGNC">         205 :     for (unsigned shift = 0; shift &lt; 32; shift += 8) {</span></span>
+<span id="L15"><span class="lineNum">      15</span>                 :<span class="tlaGNC">         164 :         output.put(static_cast&lt;char&gt;((value &gt;&gt; shift) &amp; 0xffU));</span></span>
+<span id="L16"><span class="lineNum">      16</span>                 :             :     }</span>
+<span id="L17"><span class="lineNum">      17</span>                 :<span class="tlaGNC">          41 : }</span></span>
+<span id="L18"><span class="lineNum">      18</span>                 :             : </span>
+<span id="L19"><span class="lineNum">      19</span>                 :<span class="tlaGNC">         228 : std::uint32_t read32(std::istream&amp; input) {</span></span>
+<span id="L20"><span class="lineNum">      20</span>                 :<span class="tlaGNC">         228 :     std::uint32_t value = 0;</span></span>
+<span id="L21"><span class="lineNum">      21</span>         [<span class="tlaGBC" title="Branch 0 was taken 858 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 192 times"> + </span>]:<span class="tlaGNC">        1050 :     for (unsigned shift = 0; shift &lt; 32; shift += 8) {</span></span>
+<span id="L22"><span class="lineNum">      22</span>                 :<span class="tlaGNC">         858 :         int byte = input.get();</span></span>
+<span id="L23"><span class="lineNum">      23</span>   [<span class="tlaGBC" title="Branch 0 was taken 36 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 822 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 36 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">         858 :         if (byte == std::char_traits&lt;char&gt;::eof()) throw std::runtime_error(&quot;truncated integer&quot;);</span></span>
+<span id="L24"><span class="lineNum">      24</span>                 :<span class="tlaGNC">         822 :         value |= static_cast&lt;std::uint32_t&gt;(byte) &lt;&lt; shift;</span></span>
+<span id="L25"><span class="lineNum">      25</span>                 :             :     }</span>
+<span id="L26"><span class="lineNum">      26</span>                 :<span class="tlaGNC">         192 :     return value;</span></span>
+<span id="L27"><span class="lineNum">      27</span>                 :             : }</span>
+<span id="L28"><span class="lineNum">      28</span>                 :             : </span>
+<span id="L29"><span class="lineNum">      29</span>                 :<span class="tlaGNC">          30 : void writeLength(std::ostream&amp; output, std::size_t value, std::uint32_t limit) {</span></span>
+<span id="L30"><span class="lineNum">      30</span>   [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 30 times"> + </span><span class="tlaUNC" title="Branch 2 was not taken"> - </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">          30 :     if (value &gt; limit) throw std::runtime_error(&quot;length exceeds format limit&quot;);</span></span>
+<span id="L31"><span class="lineNum">      31</span>                 :<span class="tlaGNC">          30 :     write32(output, static_cast&lt;std::uint32_t&gt;(value));</span></span>
+<span id="L32"><span class="lineNum">      32</span>                 :<span class="tlaGNC">          30 : }</span></span>
+<span id="L33"><span class="lineNum">      33</span>                 :             : </span>
+<span id="L34"><span class="lineNum">      34</span>                 :<span class="tlaGNC">         205 : std::uint32_t readLength(std::istream&amp; input, std::uint32_t limit) {</span></span>
+<span id="L35"><span class="lineNum">      35</span>                 :<span class="tlaGNC">         205 :     auto value = read32(input);</span></span>
+<span id="L36"><span class="lineNum">      36</span>   [<span class="tlaGBC" title="Branch 0 was taken 1 time"> + </span><span class="tlaGBC" title="Branch 1 was taken 176 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 1 time"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">         177 :     if (value &gt; limit) throw std::runtime_error(&quot;invalid length&quot;);</span></span>
+<span id="L37"><span class="lineNum">      37</span>                 :<span class="tlaGNC">         176 :     return value;</span></span>
+<span id="L38"><span class="lineNum">      38</span>                 :             : }</span>
+<span id="L39"><span class="lineNum">      39</span>                 :             : </span>
+<span id="L40"><span class="lineNum">      40</span>                 :<span class="tlaGNC">          15 : void writeStrings(std::ostream&amp; output, const std::vector&lt;std::string&gt;&amp; values) {</span></span>
+<span id="L41"><span class="lineNum">      41</span>                 :<span class="tlaGNC">          15 :     writeLength(output, values.size(), maxItems);</span></span>
+<span id="L42"><span class="lineNum">      42</span>         [<span class="tlaGBC" title="Branch 0 was taken 12 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 15 times"> + </span>]:<span class="tlaGNC">          27 :     for (const auto&amp; value : values) {</span></span>
+<span id="L43"><span class="lineNum">      43</span>         [<span class="tlaGBC" title="Branch 0 was taken 12 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">          12 :         writeLength(output, value.size(), maxStringBytes);</span></span>
+<span id="L44"><span class="lineNum">      44</span>         [<span class="tlaGBC" title="Branch 0 was taken 12 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">          12 :         output.write(value.data(), static_cast&lt;std::streamsize&gt;(value.size()));</span></span>
+<span id="L45"><span class="lineNum">      45</span>                 :             :     }</span>
+<span id="L46"><span class="lineNum">      46</span>                 :<span class="tlaGNC">          15 : }</span></span>
+<span id="L47"><span class="lineNum">      47</span>                 :             : </span>
+<span id="L48"><span class="lineNum">      48</span>                 :<span class="tlaGNC">         143 : std::vector&lt;std::string&gt; readStrings(std::istream&amp; input) {</span></span>
+<span id="L49"><span class="lineNum">      49</span>                 :<span class="tlaGNC">         143 :     auto count = readLength(input, maxItems);</span></span>
+<span id="L50"><span class="lineNum">      50</span>                 :<span class="tlaGNC">         122 :     std::vector&lt;std::string&gt; values;</span></span>
+<span id="L51"><span class="lineNum">      51</span>         [<span class="tlaGBC" title="Branch 0 was taken 47 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 115 times"> + </span>]:<span class="tlaGNC">         162 :     for (std::uint32_t i = 0; i &lt; count; ++i) {</span></span>
+<span id="L52"><span class="lineNum">      52</span>         [<span class="tlaGBC" title="Branch 0 was taken 43 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 4 times"> + </span>]:<span class="tlaGNC">          47 :         auto length = readLength(input, maxStringBytes);</span></span>
+<span id="L53"><span class="lineNum">      53</span>         [<span class="tlaGBC" title="Branch 0 was taken 43 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">          43 :         std::string value(length, '\0');</span></span>
+<span id="L54"><span class="lineNum">      54</span>   [<span class="tlaGBC" title="Branch 0 was taken 43 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 43 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">          43 :         if (!input.read(value.data(), length)) throw std::runtime_error(&quot;truncated string&quot;);</span></span>
+<span class="lineNum">        </span>    <span class="tlaGBC" title="Branch 4 was taken 3 times"> + </span><span class="tlaGBC" title="Branch 5 was taken 40 times"> + </span><span class="tlaGBC" title="Branch 6 was taken 3 times"> + </span><span class="tlaUNC" title="Branch 7 was not taken"> - </span>]
+<span id="L55"><span class="lineNum">      55</span>         [<span class="tlaGBC" title="Branch 0 was taken 40 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">          40 :         values.push_back(std::move(value));</span></span>
+<span id="L56"><span class="lineNum">      56</span>                 :<span class="tlaGNC">          43 :     }</span></span>
+<span id="L57"><span class="lineNum">      57</span>                 :<span class="tlaGNC">         115 :     return values;</span></span>
+<span id="L58"><span class="lineNum">      58</span>                 :<span class="tlaGNC">           7 : }</span></span>
+<span id="L59"><span class="lineNum">      59</span>                 :             : </span>
+<span id="L60"><span class="lineNum">      60</span>                 :             : }  // namespace</span>
+<span id="L61"><span class="lineNum">      61</span>                 :             : </span>
+<span id="L62"><span class="lineNum">      62</span>                 :<span class="tlaGNC">           3 : void Lab1Data::writeBinary(std::ostream&amp; output) const {</span></span>
+<span id="L63"><span class="lineNum">      63</span>         [<span class="tlaGBC" title="Branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">           3 :     output.write(&quot;LR3C&quot;, 4);</span></span>
+<span id="L64"><span class="lineNum">      64</span>   [<span class="tlaGBC" title="Branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 3 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">           3 :     writeStrings(output, array.read());</span></span>
+<span id="L65"><span class="lineNum">      65</span>   [<span class="tlaGBC" title="Branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 3 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">           3 :     writeStrings(output, single.read());</span></span>
+<span id="L66"><span class="lineNum">      66</span>   [<span class="tlaGBC" title="Branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 3 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">           3 :     writeStrings(output, doubly.read());</span></span>
+<span id="L67"><span class="lineNum">      67</span>   [<span class="tlaGBC" title="Branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 3 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">           3 :     writeStrings(output, queue.read());</span></span>
+<span id="L68"><span class="lineNum">      68</span>   [<span class="tlaGBC" title="Branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 3 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">           3 :     writeStrings(output, stack.read());</span></span>
+<span id="L69"><span class="lineNum">      69</span>         [<span class="tlaGBC" title="Branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">           3 :     auto keys = tree.levelOrder();</span></span>
+<span id="L70"><span class="lineNum">      70</span>         [<span class="tlaGBC" title="Branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">           3 :     writeLength(output, keys.size(), maxItems);</span></span>
+<span id="L71"><span class="lineNum">      71</span>   [<span class="tlaGBC" title="Branch 0 was taken 11 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 11 times"> + </span><span class="tlaGBC" title="Branch 3 was taken 3 times"> + </span>]:<span class="tlaGNC">          14 :     for (int key : keys) write32(output, static_cast&lt;std::uint32_t&gt;(key));</span></span>
+<span id="L72"><span class="lineNum">      72</span>   [<span class="tlaGBC" title="Branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 1 time"> + </span><span class="tlaGBC" title="Branch 3 was taken 2 times"> + </span> :<span class="tlaGNC">           3 :     if (!output) throw std::runtime_error(&quot;binary write failed&quot;);</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="Branch 4 was taken 1 time"> + </span><span class="tlaUNC" title="Branch 5 was not taken"> - </span>]
+<span id="L73"><span class="lineNum">      73</span>                 :<span class="tlaGNC">           3 : }</span></span>
+<span id="L74"><span class="lineNum">      74</span>                 :             : </span>
+<span id="L75"><span class="lineNum">      75</span>                 :<span class="tlaGNC">          48 : std::unique_ptr&lt;Lab1Data&gt; Lab1Data::readBinary(std::istream&amp; input) {</span></span>
+<span id="L76"><span class="lineNum">      76</span>         [<span class="tlaGBC" title="Branch 0 was taken 48 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">          48 :     std::string header(4, '\0');</span></span>
+<span id="L77"><span class="lineNum">      77</span>   [<span class="tlaGBC" title="Branch 0 was taken 48 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 48 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">          48 :     if (!input.read(header.data(), 4) || header != &quot;LR3C&quot;) {</span></span>
+<span class="lineNum">        </span> <span class="tlaGBC" title="Branch 4 was taken 44 times"> + </span><span class="tlaGBC" title="Branch 5 was taken 4 times"> + </span><span class="tlaGBC" title="Branch 6 was taken 44 times"> + </span><span class="tlaUNC" title="Branch 7 was not taken"> - </span><span class="tlaGBC" title="Branch 8 was taken 1 time"> + </span> 
+<span class="lineNum">        </span>       <span class="tlaGBC" title="Branch 9 was taken 43 times"> + </span><span class="tlaGBC" title="Branch 10 was taken 5 times"> + </span><span class="tlaGBC" title="Branch 11 was taken 43 times"> + </span>]
+<span id="L78"><span class="lineNum">      78</span>         [<span class="tlaGBC" title="Branch 0 was taken 5 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">           5 :         throw std::runtime_error(&quot;invalid binary header&quot;);</span></span>
+<span id="L79"><span class="lineNum">      79</span>                 :             :     }</span>
+<span id="L80"><span class="lineNum">      80</span>         [<span class="tlaGBC" title="Branch 0 was taken 43 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">          43 :     auto data = std::make_unique&lt;Lab1Data&gt;();</span></span>
+<span id="L81"><span class="lineNum">      81</span>   [<span class="tlaGBC" title="Branch 0 was taken 31 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 12 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 32 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">          75 :     for (const auto&amp; value : readStrings(input)) data-&gt;array.push(value);</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="Branch 4 was taken 32 times"> + </span><span class="tlaGBC" title="Branch 5 was taken 31 times"> + </span>]
+<span id="L82"><span class="lineNum">      82</span>   [<span class="tlaGBC" title="Branch 0 was taken 27 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 4 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 2 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">          33 :     for (const auto&amp; value : readStrings(input)) data-&gt;single.push(value);</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="Branch 4 was taken 2 times"> + </span><span class="tlaGBC" title="Branch 5 was taken 27 times"> + </span>]
+<span id="L83"><span class="lineNum">      83</span>   [<span class="tlaGBC" title="Branch 0 was taken 23 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 4 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 2 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">          29 :     for (const auto&amp; value : readStrings(input)) data-&gt;doubly.push(value);</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="Branch 4 was taken 2 times"> + </span><span class="tlaGBC" title="Branch 5 was taken 23 times"> + </span>]
+<span id="L84"><span class="lineNum">      84</span>   [<span class="tlaGBC" title="Branch 0 was taken 19 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 4 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 2 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">          25 :     for (const auto&amp; value : readStrings(input)) data-&gt;queue.push(value);</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="Branch 4 was taken 2 times"> + </span><span class="tlaGBC" title="Branch 5 was taken 19 times"> + </span>]
+<span id="L85"><span class="lineNum">      85</span>         [<span class="tlaGBC" title="Branch 0 was taken 15 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 4 times"> + </span>]:<span class="tlaGNC">          19 :     const auto stackValues = readStrings(input);</span></span>
+<span id="L86"><span class="lineNum">      86</span>   [<span class="tlaGBC" title="Branch 0 was taken 2 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 17 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">          17 :     for (auto it = stackValues.rbegin(); it != stackValues.rend(); ++it) data-&gt;stack.push(*it);</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="Branch 4 was taken 2 times"> + </span><span class="tlaGBC" title="Branch 5 was taken 15 times"> + </span>]
+<span id="L87"><span class="lineNum">      87</span>         [<span class="tlaGBC" title="Branch 0 was taken 11 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 4 times"> + </span>]:<span class="tlaGNC">          15 :     auto count = readLength(input, maxItems);</span></span>
+<span id="L88"><span class="lineNum">      88</span>         [<span class="tlaGBC" title="Branch 0 was taken 23 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 2 times"> + </span>]:<span class="tlaGNC">          25 :     for (std::uint32_t i = 0; i &lt; count; ++i) {</span></span>
+<span id="L89"><span class="lineNum">      89</span>         [<span class="tlaGBC" title="Branch 0 was taken 15 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 8 times"> + </span>]:<span class="tlaGNC">          23 :         auto raw = read32(input);</span></span>
+<span id="L90"><span class="lineNum">      90</span>         [<span class="tlaGBC" title="Branch 0 was taken 12 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 3 times"> + </span>]:<span class="tlaGNC">          15 :         auto key = raw &lt;= INT32_MAX ? static_cast&lt;std::int64_t&gt;(raw)</span></span>
+<span id="L91"><span class="lineNum">      91</span>                 :<span class="tlaGNC">           3 :                                    : static_cast&lt;std::int64_t&gt;(raw) - (INT64_C(1) &lt;&lt; 32);</span></span>
+<span id="L92"><span class="lineNum">      92</span>   [<span class="tlaGBC" title="Branch 0 was taken 15 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 1 time"> + </span><span class="tlaGBC" title="Branch 3 was taken 14 times"> + </span> :<span class="tlaGNC">          15 :         if (data-&gt;tree.contains(static_cast&lt;int&gt;(key))) throw std::runtime_error(&quot;duplicate tree key&quot;);</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="Branch 4 was taken 1 time"> + </span><span class="tlaUNC" title="Branch 5 was not taken"> - </span>]
+<span id="L93"><span class="lineNum">      93</span>         [<span class="tlaGBC" title="Branch 0 was taken 14 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">          14 :         data-&gt;tree.insert(static_cast&lt;int&gt;(key));</span></span>
+<span id="L94"><span class="lineNum">      94</span>                 :             :     }</span>
+<span id="L95"><span class="lineNum">      95</span>   [<span class="tlaGBC" title="Branch 0 was taken 2 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 1 time"> + </span><span class="tlaGBC" title="Branch 3 was taken 1 time"> + </span> :<span class="tlaGNC">           2 :     if (input.peek() != std::char_traits&lt;char&gt;::eof() || input.bad()) {</span></span>
+<span class="lineNum">        </span> <span class="tlaGBC" title="Branch 4 was taken 1 time"> + </span><span class="tlaUNC" title="Branch 5 was not taken"> - </span><span class="tlaUNC" title="Branch 6 was not taken"> - </span><span class="tlaGBC" title="Branch 7 was taken 1 time"> + </span><span class="tlaGBC" title="Branch 8 was taken 1 time"> + </span> 
+<span class="lineNum">        </span>             <span class="tlaGBC" title="Branch 9 was taken 1 time"> + </span>]
+<span id="L96"><span class="lineNum">      96</span>         [<span class="tlaGBC" title="Branch 0 was taken 1 time"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">           1 :         throw std::runtime_error(&quot;unexpected data after tree&quot;);</span></span>
+<span id="L97"><span class="lineNum">      97</span>                 :             :     }</span>
+<span id="L98"><span class="lineNum">      98</span>                 :<span class="tlaGNC">           2 :     return data;</span></span>
+<span id="L99"><span class="lineNum">      99</span>                 :<span class="tlaGNC">         104 : }</span></span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

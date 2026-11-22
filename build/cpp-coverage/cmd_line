@@ -1,0 +1,1 @@
+genhtml /home/runner/work/Semester_3_Lab_3/Semester_3_Lab_3/build/linux/reports/cpp-coverage.info --branch-coverage --legend --prefix /home/runner/work/Semester_3_Lab_3/Semester_3_Lab_3/cpp --title 'Lab 3 C++' --output-directory /home/runner/work/Semester_3_Lab_3/Semester_3_Lab_3/build/linux/reports/cpp-coverage

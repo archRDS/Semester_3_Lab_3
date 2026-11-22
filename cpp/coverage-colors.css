@@ -1,6 +1,7 @@
 
 /* Executed and missed source lines in LCOV 1.x and 2.x. */
 span.lineCov,
+span.coverLegendCov,
 span.tlaGBC,
 span.tlaGNC,
 span.tlaBgGBC,
@@ -12,6 +13,7 @@ a.tlaBgGNC {
 }
 
 span.lineNoCov,
+span.coverLegendNoCov,
 span.tlaUNC,
 span.tlaBgUNC,
 a.tlaBgUNC {
