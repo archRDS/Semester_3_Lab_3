@@ -53,8 +53,8 @@
       </tr>
       <tr>
         <th scope="row">Branches:</th>
-        <td class="coverage-low">59.1%</td>
-        <td class="coverage-low">13 / 0 / 22</td>
+        <td class="coverage-low">61.1%</td>
+        <td class="coverage-low">11 / 0 / 18</td>
       </tr>
     </table>
   </div>
@@ -78,7 +78,7 @@
     <div role="gridcell" class="color-fg-muted flex-auto min-width-0 d-flex flex-justify-end flex-wrap flex-items-baseline" data-sort="7">called 7 times</div>
     <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">100.0%</div>
     <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">75.0%</div>
-    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">87.5%</div>
+    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">88.0%</div>
   </div>
   <div class="Box-row Box-row--focus-gray py-2 d-flex">
     <div role="gridcell" class="color-fg-muted flex-auto min-width-0 col-md-2"><a href="#l26">Stack::pop[abi:cxx11]() (src/stack.cpp:26)</a>    </div>
@@ -91,15 +91,15 @@
     <div role="gridcell" class="color-fg-muted flex-auto min-width-0 col-md-2"><a href="#l15">Stack::push(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;) (src/stack.cpp:15)</a>    </div>
     <div role="gridcell" class="color-fg-muted flex-auto min-width-0 d-flex flex-justify-end flex-wrap flex-items-baseline" data-sort="7">called 7 times</div>
     <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">100.0%</div>
-    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">37.5%</div>
-    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">60.0%</div>
+    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">25.0%</div>
+    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">67.0%</div>
   </div>
   <div class="Box-row Box-row--focus-gray py-2 d-flex">
     <div role="gridcell" class="color-fg-muted flex-auto min-width-0 col-md-2"><a href="#l34">Stack::read[abi:cxx11]() const (src/stack.cpp:34)</a>    </div>
     <div role="gridcell" class="color-fg-muted flex-auto min-width-0 d-flex flex-justify-end flex-wrap flex-items-baseline" data-sort="6">called 6 times</div>
     <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">83.3%</div>
     <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">75.0%</div>
-    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">88.9%</div>
+    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">89.0%</div>
   </div>
   <div class="Box-row Box-row--focus-gray py-2 d-flex">
     <div role="gridcell" class="color-fg-muted flex-auto min-width-0 col-md-2"><a href="#l6">Stack::~Stack() (src/stack.cpp:6)</a>    </div>
@@ -184,8 +184,8 @@
           <details class="linebranchDetails">
             <summary class="linebranchSummary">2/2</summary>
             <div class="linebranchContents">
-              <div class="takenBranch">&check; Branch 7 &rightarrow; 3 taken 3 times.</div>
-              <div class="takenBranch">&check; Branch 7 &rightarrow; 8 taken 46 times.</div>
+              <div class="takenBranch">&check; Branch 0 taken 3 times.</div>
+              <div class="takenBranch">&check; Branch 1 taken 46 times.</div>
             </div>
           </details>
         </td>
@@ -205,8 +205,8 @@
           <details class="linebranchDetails">
             <summary class="linebranchSummary">1/2</summary>
             <div class="linebranchContents">
-              <div class="takenBranch">&check; Branch 3 &rightarrow; 4 taken 3 times.</div>
-              <div class="notTakenBranch">&cross; Branch 3 &rightarrow; 6 not taken.</div>
+              <div class="takenBranch">&check; Branch 0 taken 3 times.</div>
+              <div class="notTakenBranch">&cross; Branch 1 not taken.</div>
             </div>
           </details>
         </td>
@@ -246,7 +246,7 @@
         <td class="linebranch">
         </td>
         <td class="linecount"></td>
-        <td class="src "><span class="c1">// Р”РѕР±Р°РІР»СЏРµС‚ СЌР»РµРјРµРЅС‚ РЅР° РІРµСЂС€РёРЅСѓ СЃС‚РµРєР°.</span></td>
+        <td class="src "><span class="c1">// Добавляет элемент на вершину стека.</span></td>
       </tr>
       <tr class="source-line">
         <td class="lineno"><a id="l15" href="#l15">15</a></td>
@@ -259,16 +259,12 @@
         <td class="lineno"><a id="l16" href="#l16">16</a></td>
         <td class="linebranch">
           <details class="linebranchDetails">
-            <summary class="linebranchSummary">3/8</summary>
+            <summary class="linebranchSummary">1/4</summary>
             <div class="linebranchContents">
-              <div class="takenBranch">&check; Branch 3 &rightarrow; 4 taken 7 times.</div>
-              <div class="notTakenBranch">&cross; Branch 3 &rightarrow; 9 not taken.</div>
-              <div class="notTakenBranch">&cross; Branch 4 &rightarrow; 5 not taken.</div>
-              <div class="takenBranch">&check; Branch 4 &rightarrow; 6 taken 7 times.</div>
-              <div class="notTakenBranch">&cross; Branch 6 &rightarrow; 7 not taken.</div>
-              <div class="takenBranch">&check; Branch 6 &rightarrow; 8 taken 7 times.</div>
-              <div class="notTakenBranch">&cross; Branch 9 &rightarrow; 10 not taken.</div>
-              <div class="notTakenBranch">&cross; Branch 9 &rightarrow; 11 not taken.</div>
+              <div class="takenBranch">&check; Branch 2 taken 7 times.</div>
+              <div class="notTakenBranch">&cross; Branch 3 not taken.</div>
+              <div class="notTakenBranch">&cross; Branch 4 not taken.</div>
+              <div class="notTakenBranch">&cross; Branch 5 not taken.</div>
             </div>
           </details>
         </td>
@@ -309,10 +305,10 @@
           <details class="linebranchDetails">
             <summary class="linebranchSummary">3/4</summary>
             <div class="linebranchContents">
-              <div class="takenBranch">&check; Branch 2 &rightarrow; 3 taken 2 times.</div>
-              <div class="takenBranch">&check; Branch 2 &rightarrow; 6 taken 5 times.</div>
-              <div class="takenBranch">&check; Branch 4 &rightarrow; 5 taken 2 times.</div>
-              <div class="notTakenBranch">&cross; Branch 4 &rightarrow; 8 not taken.</div>
+              <div class="takenBranch">&check; Branch 0 taken 2 times.</div>
+              <div class="takenBranch">&check; Branch 1 taken 5 times.</div>
+              <div class="takenBranch">&check; Branch 4 taken 2 times.</div>
+              <div class="notTakenBranch">&cross; Branch 5 not taken.</div>
             </div>
           </details>
         </td>
@@ -345,7 +341,7 @@
         <td class="linebranch">
         </td>
         <td class="linecount"></td>
-        <td class="src "><span class="c1">// РЎРЅРёРјР°РµС‚ СЌР»РµРјРµРЅС‚ СЃ РІРµСЂС€РёРЅС‹ Рё РІРѕР·РІСЂР°С‰Р°РµС‚ РµРіРѕ Р·РЅР°С‡РµРЅРёРµ.</span></td>
+        <td class="src "><span class="c1">// Снимает элемент с вершины и возвращает его значение.</span></td>
       </tr>
       <tr class="source-line">
         <td class="lineno"><a id="l26" href="#l26">26</a></td>
@@ -381,8 +377,8 @@
           <details class="linebranchDetails">
             <summary class="linebranchSummary">1/2</summary>
             <div class="linebranchContents">
-              <div class="takenBranch">&check; Branch 3 &rightarrow; 4 taken 4 times.</div>
-              <div class="notTakenBranch">&cross; Branch 3 &rightarrow; 6 not taken.</div>
+              <div class="takenBranch">&check; Branch 0 taken 4 times.</div>
+              <div class="notTakenBranch">&cross; Branch 1 not taken.</div>
             </div>
           </details>
         </td>
@@ -430,8 +426,8 @@
           <details class="linebranchDetails">
             <summary class="linebranchSummary">2/2</summary>
             <div class="linebranchContents">
-              <div class="takenBranch">&check; Branch 6 &rightarrow; 4 taken 5 times.</div>
-              <div class="takenBranch">&check; Branch 6 &rightarrow; 7 taken 6 times.</div>
+              <div class="takenBranch">&check; Branch 0 taken 5 times.</div>
+              <div class="takenBranch">&check; Branch 1 taken 6 times.</div>
             </div>
           </details>
         </td>
@@ -444,8 +440,8 @@
           <details class="linebranchDetails">
             <summary class="linebranchSummary">1/2</summary>
             <div class="linebranchContents">
-              <div class="takenBranch">&check; Branch 4 &rightarrow; 5 taken 5 times.</div>
-              <div class="notTakenBranch">&cross; Branch 4 &rightarrow; 9 not taken.</div>
+              <div class="takenBranch">&check; Branch 1 taken 5 times.</div>
+              <div class="notTakenBranch">&cross; Branch 2 not taken.</div>
             </div>
           </details>
         </td>
@@ -487,7 +483,7 @@
         <hr class="block-separator"/>
         <footer class="text-center">
           Created using <a href="http://gcovr.com/en/8.6">GCOVR (Version 8.6)</a>
-          at 2026-11-22 23:07:38
+          at 2026-11-23 03:43:43
         </footer>
       </div>
     </div>
